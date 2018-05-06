@@ -1,6 +1,5 @@
 package server.controller;
 
-import exceptons.IllegalMessageArgument;
 import server.model.Node;
 import server.model.ScoreCounter;
 import server.model.Snake;
@@ -126,7 +125,11 @@ public class SnakeController extends Thread implements Observer {
                 snk.move("poll");
             }
 
-
+            try {
+                sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
