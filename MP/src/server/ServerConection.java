@@ -14,14 +14,14 @@ public class ServerConection {
     public void run(){
         try {
 
-            ServerSocket socket = new ServerSocket(8000);
+            ServerSocket socket = new ServerSocket(9000);
             ScoreCounter counter = new ScoreCounter();
 
             while (true){
 
                 Socket s = socket.accept();
 
-                new SnakeController( s , s.getInputStream(), s.getOutputStream(  ), this.id , counter).run();
+                new SnakeController( s , s.getInputStream(), s.getOutputStream(  ), this.id , counter).start();
                 this.id += 1;
             }
         } catch (IOException e) {

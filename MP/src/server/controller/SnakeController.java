@@ -18,6 +18,7 @@ public class SnakeController extends Thread implements Observer {
     private InputStream iST;
     private OutputStream oST;
     BufferedReader read;
+    PrintWriter writer;
 
     private Snake snk;
     private Node treasure;
@@ -36,6 +37,11 @@ public class SnakeController extends Thread implements Observer {
         this.read = new BufferedReader(new InputStreamReader(iST));
         this.connected = true;
         this.stopped = true;
+        this.snk.addObserver(this);
+        scores.addObserver(this);
+        this.treasure = new Node(0,0);
+
+        this.writer = new PrintWriter(this.oST,true);
 
     }
 
@@ -46,11 +52,8 @@ public class SnakeController extends Thread implements Observer {
         int y = rng.nextInt(MAX_SIZE-0);
         this.treasure.setPos(x,y);
 
-        try {
-            oST.write(("TRS;" + this.treasure.getX() + ";" + this.treasure.getY()).getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            writer.println(("TRS;" + this.treasure.getX() + ";" + this.treasure.getY()));
+
 
     }
 
@@ -61,10 +64,16 @@ public class SnakeController extends Thread implements Observer {
                 String[] start = read.readLine().split(";");
                 if (start[0].equals("STARTINFO")) {
                     this.snk.setName(start[1]);
+
+                }if (start[0].equals("DIR")) {
+                    this.snk.setMov(start[1]);
                     this.stopped = false;
                 }
+                this.randomTreasure();
 
             } catch (IOException e) {
+                this.connected= false;
+                this.stopped= false;
                 e.printStackTrace();
             }
         }
@@ -142,16 +151,8 @@ public class SnakeController extends Thread implements Observer {
     public void update(Observable o, Object arg) {
         String msg = o.toString();
 
-        try {
+            writer.println(msg);
 
-            oST.write(msg.getBytes());
 
-        } catch (IOException e) {
-            try {
-                oST.write("ERR; Error al enviar mensaje mediante socket".getBytes());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-        }
     }
 }

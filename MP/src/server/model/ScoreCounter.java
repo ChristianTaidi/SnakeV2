@@ -13,12 +13,14 @@ public class ScoreCounter extends Observable{
 
     public void addClient(String name, int score){
         this.scores.put(name,score);
+        setChanged();
         notifyObservers();
     }
 
     public boolean deleteClient (int id){
         if (this.scores.containsKey(id)) {
             this.scores.remove(id);
+            setChanged();
             notifyObservers();
             return true;
         }else{
@@ -29,6 +31,7 @@ public class ScoreCounter extends Observable{
     public boolean updateScore(String name){
         if (this.scores.containsKey(name)) {
             this.scores.replace(name, this.scores.get(name)+100);
+            setChanged();
             notifyObservers();
             return true;
         }else{

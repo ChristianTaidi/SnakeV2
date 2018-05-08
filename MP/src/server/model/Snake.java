@@ -68,6 +68,7 @@ public class Snake extends Observable {
 
         this.snake.add(aux);
         this.head = aux;
+        setChanged();
         notifyObservers();
     }
 
