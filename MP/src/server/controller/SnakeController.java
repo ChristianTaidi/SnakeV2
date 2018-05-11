@@ -83,7 +83,7 @@ public class SnakeController extends Thread implements Observer {
 
 
             try {
-                if (this.iST.available() > 0) {
+                if (this.iST.available()>0) {
                     String[] msg = read.readLine().split(";");
                     if (msg[0].equals("FIN")) {
                         this.s.close();
