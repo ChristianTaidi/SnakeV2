@@ -1,5 +1,6 @@
 package server.controller;
 
+import server.exceptons.AutoHitException;
 import server.model.Node;
 import server.model.ScoreCounter;
 import server.model.Snake;
@@ -125,6 +126,7 @@ public class SnakeController extends Thread implements Observer {
                 e.printStackTrace();
             }
 
+            try{
             if (this.checkTreasure()) {
                 snk.addScore();
                 snk.move("keep");
@@ -132,10 +134,15 @@ public class SnakeController extends Thread implements Observer {
 
             } else {
                 snk.move("poll");
+
+            }}catch (AutoHitException e){
+
+                this.writer.println(e.getMessage());
+
             }
 
             try {
-                sleep(500);
+                sleep(150);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -152,7 +159,7 @@ public class SnakeController extends Thread implements Observer {
         String msg = o.toString();
 
             writer.println(msg);
-
+        System.out.println("Mensaje");
 
     }
 }

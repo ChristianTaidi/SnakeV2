@@ -14,7 +14,7 @@ public class ServerConection {
     public void run(){
         try {
 
-            ServerSocket socket = new ServerSocket(9000);
+            ServerSocket socket = new ServerSocket(9305);
             ScoreCounter counter = new ScoreCounter();
 
             while (true){

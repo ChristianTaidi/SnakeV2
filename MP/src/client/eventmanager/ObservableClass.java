@@ -29,15 +29,19 @@ public class ObservableClass extends Observable implements KeyListener{
     @Override
     public void keyPressed(KeyEvent e) {
         String msg = "nothing";
-        char i= e.getKeyChar();
+        int i= e.getKeyCode();
         if(i == KeyEvent.VK_UP){
-            msg= "up";
+            msg= "DIR;UP";
+            System.out.println("ARRIBA");
         }else if(i == KeyEvent.VK_DOWN){
-            msg= "down";
+            msg= "DIR;DWN";
+            System.out.println("ABAJO");
         }else if(i == KeyEvent.VK_LEFT){
-            msg= "left";
+            msg= "DIR;LFT";
+            System.out.println("IZQUIERDA");
         }else if(i == KeyEvent.VK_RIGHT){
-            msg= "right";
+            msg= "DIR;RGT";
+            System.out.println("DERECHA");
         }else if(i == KeyEvent.VK_V){
             msg= "speed";
         }
@@ -59,7 +63,10 @@ public class ObservableClass extends Observable implements KeyListener{
 
     public void botonInicioMouseClicked(java.awt.event.MouseEvent evt) {
         Escaner scan = new Escaner();
+        System.out.println("Introduzca su ID: ");
+        String name = scan.readPlayerName();
         setChanged();
-        notifyObservers("STARTINFO;"+ scan.readPlayerName());
+        notifyObservers("STARTINFO;"+ name);
+
     }
 }

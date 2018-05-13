@@ -61,11 +61,16 @@ public class Pixels extends JFrame {
     public Pixels(ObservableClass observable) {
         this.observable=observable;
         initComponents();
-        mainPanel.setPreferredSize(new Dimension(350, 350));
+
+
+        mainPanel.setPreferredSize(new Dimension(1920, 1080));
+        mainPanel.repaint();
         System.out.println(mainPanel.getSize());
         GridLayout gl = (GridLayout) mainPanel.getLayout();
+        gl.preferredLayoutSize(mainPanel);
         panels = new JPanel[gl.getRows()][gl.getColumns()];
-        
+        campoPlayerName.addKeyListener(this.observable);
+
         System.out.println(gl.getRows());
         System.out.println(gl.getColumns());
         
@@ -76,8 +81,7 @@ public class Pixels extends JFrame {
                 panels[i][j].setBackground(Color.red);
                 mainPanel.add(panels[i][j]);
                 
-               // System.out.println("panel_"+i+"_"+j);
-                
+
             }
         }    }
 
@@ -100,6 +104,7 @@ public class Pixels extends JFrame {
         ejeYLabel = new javax.swing.JLabel();
         ejeXCampo = new javax.swing.JFormattedTextField();
         ejeYCampo = new javax.swing.JFormattedTextField();
+
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 

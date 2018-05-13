@@ -2,6 +2,8 @@ package server.model;
 
 
 
+import server.exceptons.AutoHitException;
+
 import java.util.*;
 
 public class Snake extends Observable {
@@ -25,6 +27,7 @@ public class Snake extends Observable {
         this.snake= new LinkedList<Node>();
         this.lastTail= new Node(46,45);
         this.head = new Node(45,45);
+        this.mov="none";
 
         this.snake.add(this.lastTail);
         this.snake.add(this.head);
@@ -33,7 +36,7 @@ public class Snake extends Observable {
         this.scores = counter;
     }
 
-    public void move(String check){
+    public void move(String check) throws AutoHitException {
 
         Node aux;
         switch (this.mov){
@@ -54,17 +57,22 @@ public class Snake extends Observable {
                 System.out.println("Error");
 
         }
-        if(check.equals("keep")){
+        if(!this.snake.contains(aux)){
+            if(check.equals("keep")){
 
-            this.lastTail = this.snake.peek();
+                this.lastTail = this.snake.peek();
 
-        }if(check.equals("poll")){
+            }if(check.equals("poll")){
 
-            this.lastTail = this.snake.poll();
+                this.lastTail = this.snake.poll();
 
+            }else{
+                System.out.println("Error");
+            }
         }else{
-            System.out.println("Error");
+            throw new AutoHitException("FIN;Fin de la partida");
         }
+
 
         this.snake.add(aux);
         this.head = aux;
@@ -79,7 +87,26 @@ public class Snake extends Observable {
     }
 
     public void setMov(String mov){
-        this.mov = mov;
+
+        if(mov.equals("UP")){
+            if (!this.mov.equals("DWN")){
+                this.mov=mov;
+            }
+
+        }if(mov.equals("LFT")){
+            if (!this.mov.equals("RGT")){
+                this.mov=mov;
+            }
+        }if(mov.equals("RGT")){
+            if (!this.mov.equals("LFT")){
+                this.mov=mov;
+            }
+        }if(mov.equals("DWN")){
+            if (!this.mov.equals("UP")){
+                this.mov=mov;
+            }
+        }
+
 
     }
 
