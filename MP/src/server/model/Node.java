@@ -1,5 +1,8 @@
 package server.model;
 
+/**
+ * class that represents a node, needs 2 coords, so they can be sent to the client and printed
+ */
 public class Node {
 
     private int x;

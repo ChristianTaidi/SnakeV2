@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 /**
  *
- * @author k.lisowski
+ * Class used to read the name of the player from the console log
  */
 public class Escaner {
     Scanner entradaTeclado;

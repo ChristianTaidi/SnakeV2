@@ -1,7 +1,6 @@
 package client.view;
 
-import java.awt.ComponentOrientation;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.util.HashMap;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
@@ -23,28 +22,6 @@ public class Puntuacion {
         this.panel = new JPanel();
         panel.setLayout(new GridLayout(players.size(),2,10,10));
 
-       /* JLabel label1= new JLabel("         PLAYER1");
-        JLabel label2= new JLabel("         PLAYER2");
-        JLabel label3= new JLabel("         PLAYER3");
-        JLabel label4= new JLabel("         PLAYER4");
-        JLabel label5= new JLabel("         PLAYER5");
-        JFormattedTextField field1= new JFormattedTextField();
-        JFormattedTextField field2= new JFormattedTextField();
-        JFormattedTextField field3= new JFormattedTextField();
-        JFormattedTextField field4= new JFormattedTextField();
-        JFormattedTextField field5= new JFormattedTextField();
-        panel.setLayout(new GridLayout(5,2,5,5));*/
-      /*  panel.add(label1);
-        panel.add(field1);
-        panel.add(label2);
-        panel.add(field2);
-        panel.add(label3);
-        panel.add(field3);
-        panel.add(label4);
-        panel.add(field4);
-        panel.add(label5);
-        panel.add(field5); */
-
         frame.add(panel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(300,200);
@@ -52,31 +29,41 @@ public class Puntuacion {
 
     }
 
+    public void update(String[] msg){
+        this.players.get(msg[2]).setText(msg[3]);
+    }
 
-    public void setPlayersInGame(String msg)
-    {
-        players.put(msg, new JFormattedTextField());
-      //  actualizarTabla();
-        JLabel jlabel123 = new JLabel(msg);
-        panel.add(jlabel123);
-        panel.add(players.get(msg));
-        System.out.println("Maria es una pringada");
-        panel.validate();
-        panel.repaint();
+    public void setPlayersInGame(String[] msg) {
+        if (!this.players.containsKey(msg[2])) {
+            players.put(msg[2], new JFormattedTextField());
 
+            JLabel jlabel123 = new JLabel("        " + msg[2]);
+            panel.add(jlabel123);
+            panel.add(players.get(msg[2]));
+            panel.validate();
+            panel.repaint();
+        }else{
+            if(Boolean.parseBoolean(msg[1])){
+                this.deleteInfo(msg[2]);
+            }else {
+                this.update(msg);
+            }
+        }
+
+        System.out.println(this.players.size());
+    }
+
+    public void deleteInfo(String name){
+        System.out.println("Desconectando:..."+name);
+        this.players.get(name).setBackground(Color.red);
     }
 
     public HashMap<String, JFormattedTextField> getPlayers() {
         return players;
     }
 
-    public void actualizarTabla(){
-        this.panel.setLayout(new GridLayout(players.size(),2,5,5));
+
+    public boolean contains(String name) {
+        return this.players.containsKey(name);
     }
-    public static void main(String[] args){
-        Puntuacion points = new Puntuacion();
-    }
-
-
-
 }

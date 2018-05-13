@@ -1,5 +1,4 @@
 package server;
-import GUI.SnakeGUI;
 
 import java.io.Serializable;
 

@@ -7,14 +7,20 @@ package client.connection;
 import java.io.*;
 import java.net.Socket;
 /**
- *
- * @author k.lisowski
+ *  Class that establish a connection to the server provided, in this case the localhost server
+ *  socket: socket between the server and the client
+ *  streamToServer: writes data to the outputStream
+ *  br: reader for the inputStream
  */
 public class ClientSocket{
     private Socket socket;
     private PrintWriter streamToServer;
     private BufferedReader br;
 
+    /**
+     * connects the server, and initializes the writer and reader
+     * @throws Exception
+     */
     public ClientSocket()throws Exception{
         try{
 
@@ -27,7 +33,12 @@ public class ClientSocket{
             System.out.println(e.getMessage());
         }
     }
-    
+
+    /**
+     *  writes the msg param to the outputstream
+     * @param msg
+     * @throws Exception
+     */
     public void socketToServer(String msg)throws Exception{
         try{
 
@@ -38,6 +49,11 @@ public class ClientSocket{
         }
     }
 
+    /**
+     * reads from the inputStream and returns the string
+     * @return
+     * @throws IOException
+     */
     public String socketFromServer()throws IOException{
         String code ="";
         while(true){
@@ -46,6 +62,17 @@ public class ClientSocket{
                 code= br.readLine();
           }
           return code;  
+        }
+    }
+
+    /**
+     * closes the socket connection
+     */
+    public void close(){
+        try {
+            this.socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

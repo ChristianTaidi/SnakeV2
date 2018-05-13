@@ -5,21 +5,18 @@
  */
 package client.eventmanager;
 
-import client.eventmanager.Escaner;
-
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Observable;
 
 /**
- *
- * @author k.lisowski
+ *Class used to manage keyevents, gets arrowkeyEvents and notifies the controller when any event happens
+ * gameState: used to determine if the start button is used as the first start, or as after pause start
  */
 public class ObservableClass extends Observable implements KeyListener{
 
-    private int id;
+    private int gameState;
     public ObservableClass() {
-        id =0;
     }
 
     @Override
@@ -31,17 +28,17 @@ public class ObservableClass extends Observable implements KeyListener{
         String msg = "nothing";
         int i= e.getKeyCode();
         if(i == KeyEvent.VK_UP){
-            msg= "DIR;UP";
-            System.out.println("ARRIBA");
-        }else if(i == KeyEvent.VK_DOWN){
             msg= "DIR;DWN";
-            System.out.println("ABAJO");
+
+        }else if(i == KeyEvent.VK_DOWN){
+            msg= "DIR;UP";
+
         }else if(i == KeyEvent.VK_LEFT){
             msg= "DIR;LFT";
-            System.out.println("IZQUIERDA");
+
         }else if(i == KeyEvent.VK_RIGHT){
             msg= "DIR;RGT";
-            System.out.println("DERECHA");
+
         }else if(i == KeyEvent.VK_V){
             msg= "speed";
         }
@@ -56,17 +53,27 @@ public class ObservableClass extends Observable implements KeyListener{
     }
 
     public void botonPausaMouseClicked(java.awt.event.MouseEvent evt){
-        System.out.println("pausa tocada");
+        System.out.println("pausa");
         setChanged();
-        notifyObservers("STOP");
+        notifyObservers("STP");
     }
 
     public void botonInicioMouseClicked(java.awt.event.MouseEvent evt) {
-        Escaner scan = new Escaner();
-        System.out.println("Introduzca su ID: ");
-        String name = scan.readPlayerName();
-        setChanged();
-        notifyObservers("STARTINFO;"+ name);
+        if (gameState == 0) {
+            Escaner scan = new Escaner();
+            System.out.println("Introduzca su ID: ");
+            String name = scan.readPlayerName();
+            setChanged();
+            notifyObservers("STARTINFO;" +"gfds ;"+ name +";"+0);
+            gameState += 1;
+        } else {
+            setChanged();
+            notifyObservers("START;");
+        }
+    }
 
+    public void endGame() {
+        setChanged();
+        notifyObservers("FIN;");
     }
 }

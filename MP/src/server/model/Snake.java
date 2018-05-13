@@ -6,6 +6,10 @@ import server.exceptons.AutoHitException;
 
 import java.util.*;
 
+/**
+ * Class that contains the data of the snake, such as name, movement direction, length, position of the head, collection of all the nodes that form the snake, the tail of the snake
+ * and all the scores of every player
+ */
 public class Snake extends Observable {
 
 
@@ -23,6 +27,11 @@ public class Snake extends Observable {
 
     private ScoreCounter scores;
 
+    /**
+     * initializes the fields
+     * @param counter
+     * @param id
+     */
     public Snake(ScoreCounter counter,int id){
         this.snake= new LinkedList<Node>();
         this.lastTail= new Node(46,45);
@@ -36,6 +45,13 @@ public class Snake extends Observable {
         this.scores = counter;
     }
 
+    /**
+     * moves the snake depending on the mov field
+     * if the check string is KEEP, the snake grows
+     * if not the snake continues
+     * @param check
+     * @throws AutoHitException
+     */
     public void move(String check) throws AutoHitException {
 
         Node aux;
@@ -80,12 +96,19 @@ public class Snake extends Observable {
         notifyObservers();
     }
 
+    /**
+     * increases the score of the instance in the score counter
+     */
     public void addScore(){
 
         this.scores.updateScore(this.name);
         this.length += 1;
     }
 
+    /**
+     * changes the mov field, depending on the current mov, it updates or nor ex: if mov is up, it cant go down
+     * @param mov
+     */
     public void setMov(String mov){
 
         if(mov.equals("UP")){
@@ -119,7 +142,10 @@ public class Snake extends Observable {
         return this.head.getY();
     }
 
-
+    /**
+     * method that transforms to string the positions of the head and tail of the snake
+     * @return
+     */
     @Override
     public String toString() {
         return "MOV; " + this.id + ";" + this.getX() + ";" + this.getY() + ";" + this.lastTail.getX() + ";" + this.lastTail.getY();
@@ -139,5 +165,14 @@ public class Snake extends Observable {
 
     public Node getTail() {
         return this.snake.peek();
+    }
+
+    public void delete() {
+        this.scores.deleteClient(this.name);
+        try {
+            this.finalize();
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
     }
 }

@@ -11,6 +11,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
@@ -29,34 +31,7 @@ public class Pixels extends JFrame {
      */
     ObservableClass observable;
     JPanel[][] panels;
-    
-    public Pixels() {
-        
-        initComponents();
-        mainPanel.setPreferredSize(new Dimension(350, 350));
-        System.out.println(mainPanel.getSize());
-        GridLayout gl = (GridLayout) mainPanel.getLayout();
-        panels = new JPanel[gl.getRows()][gl.getColumns()];
-        
-        System.out.println(gl.getRows());
-        System.out.println(gl.getColumns());
-        
-        for(int i=0; i< gl.getRows();i++){
-            for(int j=0;j<gl.getColumns();j++){
-                
-                panels[i][j] = new JPanel();
-                panels[i][j].setBackground(Color.red);
-                mainPanel.add(panels[i][j]);
-                
-               // System.out.println("panel_"+i+"_"+j);
-                
-            }
-        }
-        
-        
-    }
 
-   
 
     public Pixels(ObservableClass observable) {
         this.observable=observable;
@@ -70,7 +45,10 @@ public class Pixels extends JFrame {
         gl.preferredLayoutSize(mainPanel);
         panels = new JPanel[gl.getRows()][gl.getColumns()];
         campoPlayerName.addKeyListener(this.observable);
-
+        JButton botonFinalizar = new JButton();
+        botonFinalizar.setText("Finalizar");
+        botonFinalizar.setBounds(150,600,30,30);
+        botonFinalizar.setVisible(true);
         System.out.println(gl.getRows());
         System.out.println(gl.getColumns());
         
@@ -98,6 +76,7 @@ public class Pixels extends JFrame {
         mainPanel = new javax.swing.JPanel();
         botonInicio = new javax.swing.JButton();
         botonPausa = new javax.swing.JButton();
+        botonFin = new JButton();
         campoPlayerName = new javax.swing.JFormattedTextField();
         playerNameLabel = new javax.swing.JLabel();
         ejeXLabel = new javax.swing.JLabel();
@@ -127,6 +106,16 @@ public class Pixels extends JFrame {
             }
         });
 
+        botonFin.setText("Desconectar");
+        botonesInicioPausa.add(botonFin);
+        botonFin.setEnabled(true);
+
+        botonFin.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                botonFinMouseClicked(evt);
+            }
+        });
+
         playerNameLabel.setText("Nombre Jugador");
 
         ejeXLabel.setText("Eje X");
@@ -152,6 +141,7 @@ public class Pixels extends JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(botonPausa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(botonInicio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(botonFin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 285, Short.MAX_VALUE)
                 .addComponent(playerNameLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -166,6 +156,7 @@ public class Pixels extends JFrame {
                 .addGap(72, 72, 72)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botonInicio)
+                        .addComponent(botonFin)
                     .addComponent(campoPlayerName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(playerNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(ejeXLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -191,28 +182,7 @@ public class Pixels extends JFrame {
             ejeXCampo.setEditable(false); //maybe ponerlo al arrancar el juego
             ejeYCampo.setEditable(false);  
         observable.botonInicioMouseClicked(evt);
-           
-            /*  Serpiente snake= new Serpiente();
-            snake.setList(new NodoSnake(44,45));
-            snake.setList(new NodoSnake(45,45));
-            snake.setList(new NodoSnake(46,45));
-            this.pintarSerpiente(snake);
-            System.out.println(snake.getLista().size());
-            ClientController cliente= new ClientController();
-            MovimientoSnake mov= new MovimientoSnake(snake);
-            this.pintarCuadroEnRojo(snake.getTail());
-            snake.actualizarLista(cliente.parseadorMov("MOV;2130;43;45"));
-            this.pintarSerpiente2(snake);
-            this.pintarCuadroEnRojo(snake.getTail());
-            snake.actualizarLista(cliente.parseadorMov("MOV;2130;43;46"));
-            this.pintarSerpiente2(snake);
-            this.pintarCuadroEnRojo(snake.getTail());
-            snake.actualizarLista(cliente.parseadorMov("MOV;2130;44;46"));
-            this.pintarSerpiente2(snake);
-            */
-        
 
-            
             
     }//GEN-LAST:event_botonInicioMouseClicked
 
@@ -222,16 +192,37 @@ public class Pixels extends JFrame {
             observable.botonPausaMouseClicked(evt);
     }//GEN-LAST:event_botonPausaMouseClicked
 
+    private void botonFinMouseClicked(MouseEvent evt){
+
+            this.observable.endGame();
+    }
+
+
     public void drawTreasure(int x,int y){
         panels[x][y].setBackground(Color.GREEN);
     }
 
-    public void drawSnake(int x, int y){
-        panels[x][y].setBackground(Color.YELLOW);
+    public void drawSnake(int x, int y) {
+        try {
+            panels[x][y].setBackground(Color.YELLOW);
+            ejeXCampo.setText(String.valueOf(x));
+            ejeYCampo.setText(String.valueOf(y));
+        } catch(Exception e){
+            PopUpWindowSnake window = new PopUpWindowSnake();
+            window.setVisible(true);
+            System.out.println("Fin de partida");
+            observable.endGame();
+        }
     }
-
     public void unDraw(int x, int y){
-        panels[x][y].setBackground(Color.RED);
+
+        try {
+            panels[x][y].setBackground(Color.RED);
+        }catch (Exception e){
+
+            observable.endGame();
+
+        }
     }
 
 
@@ -242,6 +233,7 @@ public class Pixels extends JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonInicio;
     private javax.swing.JButton botonPausa;
+    private JButton botonFin;
     private javax.swing.ButtonGroup botonesInicioPausa;
     private javax.swing.JFormattedTextField campoPlayerName;
     private javax.swing.JFormattedTextField ejeXCampo;
