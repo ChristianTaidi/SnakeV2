@@ -10,55 +10,45 @@ import java.net.Socket;
  *
  * @author k.lisowski
  */
-public class ClientSocket {
+public class ClientSocket{
     private Socket socket;
-    
-    
+    private PrintWriter streamToServer;
+    private BufferedReader br;
+
     public ClientSocket()throws Exception{
         try{
-          this.socket = new Socket("10.10.97.209", 9305);
+
+          this.socket = new Socket("127.0.0.1", 9305);
+          streamToServer = new PrintWriter(socket.getOutputStream(),true);
+          br= new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+
         }catch(Exception e){
-            e.getMessage();
+            System.out.println(e.getMessage());
         }
     }
     
     public void socketToServer(String msg)throws Exception{
         try{
-        DataOutputStream streamToServer = new DataOutputStream(socket.getOutputStream());
-        streamToServer.writeBytes(msg);
+
+        streamToServer.println(msg);
+
         }catch(Exception e)
-        {e.getMessage();
+        {System.out.println(e.getMessage());
         }
     }
+
     public String socketFromServer()throws IOException{
         String code ="";
         while(true){
           InputStreamReader in = new InputStreamReader(socket.getInputStream());
-          BufferedReader br = new BufferedReader(in);
           if(socket.getInputStream().available()>0){
                 code= br.readLine();
           }
           return code;  
         }
     }
-    
-    public static void main(String[] args) throws Exception{
-        
 
-       // InputStream streamFromServer = socket.getInputStream();
-
-      /*  int i = streamFromServer.read();
-        FileOutputStream fos= new FileOutputStream("FicheroRedes.pdf");
-        while(i != -1){
-            fos.write(i);
-            i = streamFromServer.read();
-        } 
-
-
-    socket.close();
-    fos.close();
-    */
-    }
     
     
 }
